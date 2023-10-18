@@ -1,4 +1,4 @@
-Huffman Encoding
+%Huffman Encoding
 
 my_str = 'jason';
 
