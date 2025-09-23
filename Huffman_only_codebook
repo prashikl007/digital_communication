@@ -1,4 +1,4 @@
-% Huffman coding with entropy, efficiency, and total bits in Octave
+% Huffman coding in Octave with Python-style output + entropy/efficiency
 
 text = 'huffman coding example';
 
@@ -37,15 +37,21 @@ end
 codes = containers.Map();
 codes = gen_codes(root, '', codes);
 
-% --- display Huffman codes ---
-disp('Huffman Codes:');
-disp(codes);
+% --- print like Python dictionary ---
+keys = codes.keys;
+fprintf('Huffman Codes: {');
+for i = 1:numel(keys)
+  fprintf('''%s'': ''%s''', keys{i}, codes(keys{i}));
+  if i < numel(keys)
+    fprintf(', ');
+  end
+end
+fprintf('}\n');
 
-% --- entropy calculation ---
+% --- entropy ---
 entropy = -sum(probs .* log2(probs));
 
 % --- average code length ---
-keys = codes.keys;
 avg_len = 0;
 for i=1:numel(keys)
   sym = keys{i};
@@ -55,11 +61,10 @@ end
 
 % --- efficiency ---
 eff = entropy / avg_len;
-
-% --- total bits for message ---
 total_bits = avg_len * length(text);
 
-fprintf('\nEntropy (H): %.4f bits/symbol\n', entropy);
+% --- print results ---
+fprintf('Entropy (H): %.4f bits/symbol\n', entropy);
 fprintf('Average code length (L): %.4f bits/symbol\n', avg_len);
 fprintf('Efficiency (H/L): %.2f%%\n', eff*100);
-fprintf('Total bits for full message: %d bits\n', round(total_bits));
+fprintf('Total bits for message: %d bits\n', round(total_bits));
