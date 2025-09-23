@@ -1,0 +1,65 @@
+% Huffman coding with entropy, efficiency, and total bits in Octave
+
+text = 'huffman coding example';
+
+% --- frequency count ---
+chars = unique(text);
+freqs = arrayfun(@(c) sum(text==c), chars);
+probs = freqs / sum(freqs);
+
+% --- make nodes {symbol,freq,left,right} ---
+nodes = {};
+for i=1:length(chars)
+  nodes{end+1} = {chars(i), freqs(i), [], []};
+end
+
+% --- build Huffman tree ---
+while numel(nodes) > 1
+  [~, idx] = sort(cellfun(@(n) n{2}, nodes));
+  nodes = nodes(idx);
+  left = nodes{1}; right = nodes{2};
+  merged = {[], left{2}+right{2}, left, right};
+  nodes(1:2) = [];
+  nodes{end+1} = merged;
+end
+root = nodes{1};
+
+% --- recursive code generation ---
+function codes = gen_codes(node, prefix, codes)
+  if isempty(node{3}) && isempty(node{4})
+    codes(char(node{1})) = prefix;
+  else
+    codes = gen_codes(node{3}, [prefix '0'], codes);
+    codes = gen_codes(node{4}, [prefix '1'], codes);
+  end
+end
+
+codes = containers.Map();
+codes = gen_codes(root, '', codes);
+
+% --- display Huffman codes ---
+disp('Huffman Codes:');
+disp(codes);
+
+% --- entropy calculation ---
+entropy = -sum(probs .* log2(probs));
+
+% --- average code length ---
+keys = codes.keys;
+avg_len = 0;
+for i=1:numel(keys)
+  sym = keys{i};
+  p = probs(chars==sym);
+  avg_len += p * length(codes(sym));
+end
+
+% --- efficiency ---
+eff = entropy / avg_len;
+
+% --- total bits for message ---
+total_bits = avg_len * length(text);
+
+fprintf('\nEntropy (H): %.4f bits/symbol\n', entropy);
+fprintf('Average code length (L): %.4f bits/symbol\n', avg_len);
+fprintf('Efficiency (H/L): %.2f%%\n', eff*100);
+fprintf('Total bits for full message: %d bits\n', round(total_bits));
