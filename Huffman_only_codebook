@@ -37,7 +37,7 @@ end
 codes = containers.Map();
 codes = gen_codes(root, '', codes);
 
-% --- print like Python dictionary ---
+% --- print dictionary ---
 keys = codes.keys;
 fprintf('Huffman Codes: {');
 for i = 1:numel(keys)
