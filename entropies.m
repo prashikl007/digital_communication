@@ -20,8 +20,7 @@ function z = jointEntropy(x, y)
 % Input:
 %   x, y: two integer vector of the same length 
 % Output:
-%   z: joint entroy z=H(x,y)
-% Written by Mo Chen (sth4nth@gmail.com).    
+%   z: joint entroy z=H(x,y)   
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -42,7 +41,6 @@ function z = condEntropy (x, y)
 %   x, y: two integer vector of the same length 
 % Output:
 %   z: conditional entropy z=H(x|y)
-% Written by Mo Chen (sth4nth@gmail.com).
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -69,7 +67,6 @@ function z = mutInfo(x, y)
 %   x, y: two integer vector of the same length 
 % Output:
 %   z: mutual information z=I(x,y)
-% Written by Mo Chen (sth4nth@gmail.com).
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -99,7 +96,6 @@ function z = nmi(x, y)
 %   x, y: two integer vector of the same length 
 % Ouput:
 %   z: normalized mutual information z=I(x,y)/sqrt(H(x)*H(y))
-% Written by Mo Chen (sth4nth@gmail.com).
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -113,7 +109,7 @@ Mx = sparse(idx,x,1,n,k,n);
 My = sparse(idx,y,1,n,k,n);
 Pxy = nonzeros(Mx'*My/n); %joint distribution of x and y
 Hxy = -dot(Pxy,log2(Pxy));
-% hacking, to elimative the 0log0 issue
+% elimate the 0log0 issue
 Px = nonzeros(mean(Mx,1));
 Py = nonzeros(mean(My,1));
 % entropy of Py and Px
@@ -132,7 +128,6 @@ function z = nvi(x, y)
 %   x, y: two integer vector of the same length 
 % Output:
 %   z: normalized variation information z=(1-I(x,y)/H(x,y))
-% Written by Mo Chen (sth4nth@gmail.com).
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -161,8 +156,7 @@ function z = relatEntropy (x, y)
 % Input:
 %   x, y: two integer vector of the same length 
 % Output:
-%   z: relative entropy (a.k.a KL divergence) z=KL(p(x)||p(y))
-% Written by Mo Chen (sth4nth@gmail.com).    
+%   z: relative entropy (a.k.a KL divergence) z=KL(p(x)||p(y))  
 assert(numel(x) == numel(y));
 n = numel(x);
 x = reshape(x,1,n);
@@ -212,5 +206,6 @@ isequalf(Ixy,Hx+Hy-Hxy)
 isequalf(nIxy,Ixy/sqrt(Hx*Hy))
 %% I_v(x,y) = (1-I(x,y)/H(x,y))
 isequalf(vIxy,1-Ixy/Hxy)
+
 
 
