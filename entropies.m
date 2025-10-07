@@ -4,7 +4,7 @@ function z = entropy(x)
 %   x: a integer vectors  
 % Output:
 %   z: entropy z=H(x)
-% Written by Mo Chen (sth4nth@gmail.com).
+
 n = numel(x);
 [u,~,x] = unique(x);
 k = numel(u);
@@ -212,4 +212,5 @@ isequalf(Ixy,Hx+Hy-Hxy)
 isequalf(nIxy,Ixy/sqrt(Hx*Hy))
 %% I_v(x,y) = (1-I(x,y)/H(x,y))
 isequalf(vIxy,1-Ixy/Hxy)
+
 
